@@ -57,4 +57,21 @@ const clerkWebhooks = async (req, res) => {
   }
 };
 
-export { clerkWebhooks };
+
+//API to fetch users credit
+const userCredits = async(req,res) => {
+    try{
+
+        const {clerkID} = req.body
+
+        const userData = await userModel.findOne({clerkID})
+
+        res.json({sucess:true,credits:userData.creditBalance})
+
+    }catch{
+        console.error('Webhook error:', error.message);
+    res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+export { clerkWebhooks, userCredits };
