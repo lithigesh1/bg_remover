@@ -1,38 +1,46 @@
 import { createContext, useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
-import axios from 'axios'
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const  AppContext = createContext
+const AppContext = createContext();
 
 const AppContextProvider = (props) => {
+  const [credit, setCredit] = useState(false);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const [credit, setCredit] = useState(false)
+  const { getToken } = useAuth();
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
+  const loadCreditsData = async () => {
+    try {
+      const token = await getToken();
+      const { data } = await axios.get(`${backendUrl}api/users/credits`, {
+        headers: { token },
+      });
 
-    const {getToken} = useAuth()
-
-    const loadCreditsData = async () => {
-        try{
-            
-            const token = await getToken()
-            const {data} = await axios.get(backendUrl+'api/users/credits',{headers:{token}}) 
-
-        }catch(error){
-
-        }
+      if (data.success) {
+        setCredit(data.credits);
+        console.log(data.credits); // Corrected variable name
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
     }
+  };
 
-    const value = {
-        
-    }
+  const value = {
+    credit,
+    setCredit,
+    loadCreditsData,
+    backendUrl,
+  };
 
-    return(
-        <AppContext.Provider value={value}>
-            {props.children}
-        </AppContext.Provider>
-    )
+  return (
+    <AppContext.Provider value={value}>
+      {props.children}
+    </AppContext.Provider>
+  );
+};
 
-}
-
-export default AppContextProvider
+export { AppContext };
+export default AppContextProvider;
