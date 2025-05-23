@@ -25,7 +25,7 @@ const clerkWebhooks = async (req,res) => {
                     clerkId: data.id,
                     email: data.email_addresses[0].email_address,
                     firstName: data.first_name,
-                    lastNmae: data.last_name,
+                    lastName: data.last_name,
                     photo: data.image_url
                 }
 
@@ -39,7 +39,7 @@ const clerkWebhooks = async (req,res) => {
                 const userData = {
                     email: data.email_addresses[0].email_address,
                     firstName: data.first_name,
-                    lastNmae: data.last_name,
+                    lastName: data.last_name,
                     photo: data.image_url
                 }
 
