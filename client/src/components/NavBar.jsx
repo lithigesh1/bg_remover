@@ -7,6 +7,7 @@ function NavBar() {
 
   const {openSignIn} = useClerk()
   const { isSignedIn, user } = useUser()
+  
 
   return (
     <div className='flex items-center justify-between mx-4 py-3 lg:mx-44'>
