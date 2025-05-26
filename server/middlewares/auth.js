@@ -1,23 +1,28 @@
 import jwt from 'jsonwebtoken';
 
-// Middleware function to decode JWT token to get clerkID
+// Middleware to extract and attach clerkID from token
 const authUser = async (req, res, next) => {
   try {
-    const { token } = req.headers;
+    // Accept token from either Authorization header or custom header
+    const authHeader = req.headers.authorization || req.headers.token;
 
-    if (!token) {
+    if (!authHeader) {
       return res.status(401).json({ success: false, message: 'Not Authorized. Login again.' });
     }
 
-    const token_decode = jwt.decode(token);
+    // Extract token value
+    const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : authHeader;
 
-    if (!token_decode || !token_decode.clerkID) {
+    const tokenDecoded = jwt.decode(token);
+
+    if (!tokenDecoded || !tokenDecoded.clerkID) {
       return res.status(403).json({ success: false, message: 'Invalid token.' });
     }
 
-    req.body.clerkID = token_decode.clerkID;
-    next();
+    // Attach clerkID to request object
+    req.clerkID = tokenDecoded.clerkID;
 
+    next();
   } catch (error) {
     console.error('Auth middleware error:', error.message);
     res.status(500).json({ success: false, message: 'Server error during authentication.' });
