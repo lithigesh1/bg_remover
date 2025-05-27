@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route,Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import Result from './pages/Result'
 import BuyCredit from './pages/BuyCredit'
@@ -7,7 +7,6 @@ import NavBar from './components/NavBar'
 import Footer from './components/Footer'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Analytics } from "@vercel/analytics/next";
 
 function App() {
   return (
@@ -20,7 +19,6 @@ function App() {
         <Route path='/buy' element={<BuyCredit/>}/>
       </Routes>
       <Footer/>
-      <Analytics />
     </div>
   )
 }
